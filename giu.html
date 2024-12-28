@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palavras Cruzadas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      text-align: center;
+    }
+    table {
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    td {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #000;
+      text-align: center;
+      vertical-align: middle;
+    }
+    input {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .dica {
+      margin-top: 20px;
+    }
+    .dica ul {
+      list-style: none;
+      padding: 0;
+    }
+    .dica li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jogo de Palavras Cruzadas</h1>
+    <table id="tabuleiro">
+      <!-- A tabela será gerada aqui pelo JS -->
+    </table>
+    <div class="dica">
+      <h2>Dicas</h2>
+      <ul id="dicas">
+        <!-- As dicas serão geradas aqui pelo JS -->
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const palavras = [
+      { palavra: "ESTRELAS", posicao: { x: 0, y: 0 }, direcao: "horizontal", dica: "Astronomia" },
+      { palavra: "BRILHO", posicao: { x: 0, y: 1 }, direcao: "vertical", dica: "Luz" },
+      { palavra: "CEBOLINHA", posicao: { x: 0, y: 2 }, direcao: "horizontal", dica: "Personagem" },
+      { palavra: "RISO", posicao: { x: 4, y: 0 }, direcao: "vertical", dica: "Alegria" },
+      { palavra: "TATUADORA", posicao: { x: 2, y: 4 }, direcao: "horizontal", dica: "Arte" },
+      { palavra: "PELE", posicao: { x: 1, y: 4 }, direcao: "vertical", dica: "Corpo" },
+      { palavra: "ESTUDIOSA", posicao: { x: 3, y: 3 }, direcao: "horizontal", dica: "Livros" },
+      { palavra: "SABER", posicao: { x: 1, y: 1 }, direcao: "vertical", dica: "Conhecimento" },
+      { palavra: "SONHOS", posicao: { x: 0, y: 5 }, direcao: "horizontal", dica: "Objetivo" },
+      { palavra: "FORCA", posicao: { x: 0, y: 3 }, direcao: "vertical", dica: "Energia" },
+      { palavra: "FELICIDADE", posicao: { x: 4, y: 4 }, direcao: "horizontal", dica: "Sentimento" },
+    ];
+
+    const tabela = document.getElementById("tabuleiro");
+    const listaDicas = document.getElementById("dicas");
+
+    // Função para montar a tabela de palavras cruzadas
+    function gerarTabuleiro() {
+      const tamanho = 10; // Defina o tamanho da tabela
+      for (let i = 0; i < tamanho; i++) {
+        const tr = document.createElement("tr");
+        for (let j = 0; j < tamanho; j++) {
+          const td = document.createElement("td");
+          tr.appendChild(td);
+        }
+        tabela.appendChild(tr);
+      }
+
+      palavras.forEach((palavra) => {
+        for (let i = 0; i < palavra.palavra.length; i++) {
+          const x = palavra.posicao.x;
+          const y = palavra.posicao.y;
+          const letra = palavra.palavra[i];
+
+          let td;
+          if (palavra.direcao === "horizontal") {
+            td = tabela.rows[y].cells[x + i];
+          } else if (palavra.direcao === "vertical") {
+            td = tabela.rows[y + i].cells[x];
+          }
+
+          td.innerHTML = letra;
+          td.style.backgroundColor = "#f0f0f0"; // Destaque as células
+          td.setAttribute("data-palavra", palavra.palavra); // Armazena a palavra
+          td.setAttribute("data-direcao", palavra.direcao); // Direção da palavra
+        }
+      });
+    }
+
+    // Função para gerar as dicas
+    function gerarDicas() {
+      palavras.forEach((palavra, index) => {
+        const li = document.createElement("li");
+        li.innerText = `Dica ${index + 1}: ${palavra.dica} (${palavra.palavra.length} letras)`;
+        listaDicas.appendChild(li);
+      });
+    }
+
+    // Inicializa o jogo
+    function init() {
+      gerarTabuleiro();
+      gerarDicas();
+    }
+
+    init();
+  </script>
+</body>
+</html>
